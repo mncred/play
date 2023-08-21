@@ -14,7 +14,19 @@
       "ESNext",
       "DOM"
     ],
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "paths": {
+      "@/*": [
+        "./src/*",
+        "./dist/*"
+      ],
+      "$runtime": [
+        "./wailsjs/runtime/runtime"
+      ],
+      "$app/*": [
+        "./wailsjs/go/*"
+      ]
+    }
   },
   "include": [
     "src/**/*.ts",

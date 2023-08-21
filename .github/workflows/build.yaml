@@ -1,0 +1,472 @@
+name: Build & Publish
+on:
+    push:
+        tags:
+            - 'v[0-9]+.[0-9]+.[0-9]+'
+jobs:
+    release-draft:
+        if: startsWith(github.ref, 'refs/tags/v')
+        name: Prepare Release Draft
+        runs-on: ubuntu-latest
+        needs:
+            - build
+        permissions:
+            contents: write
+            pull-requests: write
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Download MNCPlay for Windows x64
+              uses: actions/download-artifact@v4
+              with:
+                  name: mncplay-windows-amd64
+            - name: Download MNCPlay for Windows x32
+              uses: actions/download-artifact@v4
+              with:
+                  name: mncplay-windows-386
+            - name: Download MNCPlay for Windows ARM
+              uses: actions/download-artifact@v4
+              with:
+                  name: mncplay-windows-arm64
+            - name: Download MNCPlay for Mac Intel
+              uses: actions/download-artifact@v4
+              with:
+                  name: mncplay-darwin-amd64
+            - name: Download MNCPlay for Mac M1
+              uses: actions/download-artifact@v4
+              with:
+                  name: mncplay-darwin-arm64
+            - name: Download MNCPlay for Mac Universal
+              uses: actions/download-artifact@v4
+              with:
+                  name: mncplay-darwin-universal
+            - name: Download MNCPlay for Linux x64
+              uses: actions/download-artifact@v4
+              with:
+                  name: mncplay-linux-amd64
+            - name: Get Previous Tag
+              id: previoustag
+              uses: WyriHaximus/github-action-get-previous-tag@v1
+              with:
+                  fallback: v0.0.0
+            - name: Release
+              uses: ncipollo/release-action@v1
+              with:
+                draft: true
+                name: '✨ MNCPlay ${{ github.ref_name }}'
+                body: |
+                    <div align="center">
+                    <table>
+                        <tr>
+                          <td align="center" colspan="3">
+                            <b>MNCPlay ${{ github.ref_name }}</b>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td align="center">Windows</td>
+                          <td align="center">MacOS</td>
+                          <td align="center">Linux</td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <a href="https://github.com/mncred/play/releases/download/${{ github.ref_name }}/mncplay-windows-amd64.exe" target="_blank">
+                              <img width="100" src="https://raw.githubusercontent.com/mncred/play/main/.github/assets/logo-windows.png"></img>
+                            </a>
+                          </td>
+                          <td>
+                            <a href="https://github.com/mncred/play/releases/download/${{ github.ref_name }}/mncplay-darwin-universal.zip" target="_blank">
+                              <img width="100" src="https://raw.githubusercontent.com/mncred/play/main/.github/assets/logo-apple.png"></img>
+                            </a>
+                          </td>
+                          <td>
+                            <a href="https://github.com/mncred/play/releases/download/${{ github.ref_name }}/mncplay-linux-amd64" target="_blank">
+                              <img width="100" src="https://raw.githubusercontent.com/mncred/play/main/.github/assets/logo-linux.png"></img>
+                            </a>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td align="center" colspan="3">
+                            <b>Все варианты</b>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="3">
+                            Windows ౼ <a href="https://github.com/mncred/play/releases/download/${{ github.ref_name }}/mncplay-windows-amd64.exe" target="_blank">x64</a> • <a href="https://github.com/mncred/play/releases/download/${{ github.ref_name }}/mncplay-windows-386.exe" target="_blank">x32</a> • <a href="https://github.com/mncred/play/releases/download/${{ github.ref_name }}/mncplay-windows-arm64.exe" target="_blank">ARM</a>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="3">
+                            MacOS ౼ <a href="https://github.com/mncred/play/releases/download/${{ github.ref_name }}/mncplay-darwin-amd64.zip" target="_blank">Intel</a> • <a href="https://github.com/mncred/play/releases/download/${{ github.ref_name }}/mncplay-darwin-arm64.zip" target="_blank">M1</a> • <a href="https://github.com/mncred/play/releases/download/${{ github.ref_name }}/mncplay-darwin-universal.exe" target="_blank">Universal</a>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="3">
+                            Linux ౼ <a href="https://github.com/mncred/play/releases/download/${{ github.ref_name }}/mncplay-linux-amd64" target="_blank">x64</a>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+
+                    ## ℹ️ Информация о релизе
+
+                      ### 🌈 Что нового
+
+                      //TODO: Описание основных нововведений
+
+                      ### 🐞 Исправления ошибок
+
+                      //TODO: Описание исправленных ошибок
+
+                      ### 📝 Дополнительно 
+
+                      - 📒 Полный список изменений - [${{ steps.previoustag.outputs.tag }} -> ${{ github.ref_name }}](https://github.com/mncred/play/compare/${{ steps.previoustag.outputs.tag }}...${{ github.ref_name }})
+                      - 🐞 Нашли баг? - [Доложить об ошибке](https://github.com/mncred/play/issues/new)
+                      - 💡 Есть предложение? - [Запрос на улучшение](https://github.com/mncred/play/issues/new)
+                      - 🆘 Нужна помощь? - [Запрос на поддержку](https://github.com/mncred/play/issues/new)
+
+                    ## ⭐️ Поддержать проект
+
+                    Проект существует на добровольной основе и открыт для свободной модификации и распространения.
+                    Вы можете поддержать проект поставив звезду на GitHub, сделав форк и контрибьют, или финансово.
+                    Средства пойдут на разработку и продвижение этого проекта, а так же связанной экосистемы
+                    и оплату серверов. Финансовая поддержка ускорит выход обновлений.
+
+                    <div align="center">
+                      <a href="https://pay.cloudtips.ru/p/46677d4f" target="_blank">
+                        <img width="200" src="https://raw.githubusercontent.com/mncred/play/main/.github/assets/logo-cloudtips.png"></img>
+                      </a>
+                    </div>
+
+                    ## ❤️ Благодарности
+
+                    Выражаем благодарность команде [Wails](https://wails.io) за отличный инструмент разработки,
+                    а так же всем, кто помогает поддерживать и развивать проект.
+
+                    <div align="center">
+                      <table>
+                        <tr>
+                          <td align="center">
+                            Поддержали поставив звезду
+                          </td>
+                          <td align="center">
+                            Поддержали сделав форк
+                          </td>
+                        </tr>
+                        </tr>
+                          <td>
+                            <a href="https://github.com/mncred/play/stargazers" target="_blank">
+                              <img src="https://reporoster.com/stars/notext/mncred/play"></img>
+                            </a>
+                          </td>
+                          <td>
+                            <a href="https://github.com/mncred/play/network/members" target="_blank">
+                              <img src="https://reporoster.com/forks/notext/mncred/play"></img>
+                            </a>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                skipIfReleaseExists: true
+                allowUpdates: true
+                generateReleaseNotes: false
+                artifactErrorsFailBuild: true
+                replacesArtifacts: true
+                artifacts: 'mncplay-*'
+
+    build:
+        name: Build
+        runs-on: ubuntu-latest
+        needs: 
+            - build-linux
+            - build-darwin
+            - build-windows
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+    build-windows:
+        name: Build For Windows
+        runs-on: windows-latest
+        needs: 
+            - build-windows-amd64
+            - build-windows-386
+            - build-windows-arm64
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+    build-windows-amd64:
+        name: windows/amd64
+        runs-on: windows-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Install Go
+              uses: actions/setup-go@v5
+              with:
+                go-version: '>=1.21'
+            - name: Install Node
+              uses: actions/setup-node@v4
+              with:
+                node-version: 20
+            - name: Install Wails
+              run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+            - name: Build App
+              run: make build_windows_amd64
+            - name: Install UPX
+              uses: crazy-max/ghaction-upx@v3
+              with:
+                install-only: true
+            - name: UPX
+              run: upx -9 build/bin/mncplay-windows-amd64.exe
+            - name: Save Artifact
+              uses: actions/upload-artifact@v4
+              with:
+                name: mncplay-windows-amd64
+                path: build/bin/mncplay-windows-amd64.exe
+
+    build-windows-386:
+        name: windows/386
+        runs-on: windows-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Install Go
+              uses: actions/setup-go@v5
+              with:
+                go-version: '>=1.21'
+            - name: Install Node
+              uses: actions/setup-node@v4
+              with:
+                node-version: 20
+            - name: Install Wails
+              run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+            - name: Build App
+              run: make build_windows_386
+            - name: Install UPX
+              uses: crazy-max/ghaction-upx@v3
+              with:
+                install-only: true
+            - name: UPX
+              run: upx -9 build/bin/mncplay-windows-386.exe
+            - name: Save Artifact
+              uses: actions/upload-artifact@v4
+              with:
+                name: mncplay-windows-386
+                path: build/bin/mncplay-windows-386.exe
+
+    build-windows-arm64:
+        name: windows/arm64
+        runs-on: windows-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Install Go
+              uses: actions/setup-go@v5
+              with:
+                go-version: '>=1.21'
+            - name: Install Node
+              uses: actions/setup-node@v4
+              with:
+                node-version: 20
+            - name: Install Wails
+              run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+            - name: Build App
+              run: make build_windows_arm64
+            - name: Save Artifact
+              uses: actions/upload-artifact@v4
+              with:
+                name: mncplay-windows-arm64
+                path: build/bin/mncplay-windows-arm64.exe
+
+    build-darwin:
+        name: Build For MacOS
+        runs-on: macos-latest
+        needs: 
+            - build-darwin-amd64
+            - build-darwin-arm64
+            - build-darwin-universal
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+    build-darwin-amd64:
+        name: darwin/amd64
+        runs-on: macos-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Install Go
+              uses: actions/setup-go@v5
+              with:
+                  go-version: '>=1.21'
+            - name: Install Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+            - name: Install Wails
+              run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+            - name: Build App
+              run: make build_darwin_amd64
+            - name: ZIP The App
+              run: cd build/bin && zip -9 -r mncplay-darwin-amd64.zip mncplay-darwin-amd64.app
+            - name: Save Artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: mncplay-darwin-amd64
+                  path: build/bin/mncplay-darwin-amd64.zip
+
+    build-darwin-arm64:
+        name: darwin/arm64
+        runs-on: macos-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Install Go
+              uses: actions/setup-go@v5
+              with:
+                  go-version: '>=1.21'
+            - name: Install Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+            - name: Install Wails
+              run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+            - name: Build App
+              run: make build_darwin_arm64
+            - name: ZIP The App
+              run: cd build/bin && zip -9 -r mncplay-darwin-arm64.zip mncplay-darwin-arm64.app
+            - name: Save Artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: mncplay-darwin-arm64
+                  path: build/bin/mncplay-darwin-arm64.zip
+
+    build-darwin-universal:
+        name: darwin/universal
+        runs-on: macos-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Install Go
+              uses: actions/setup-go@v5
+              with:
+                  go-version: '>=1.21'
+            - name: Install Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+            - name: Install Wails
+              run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+            - name: Build App
+              run: make build_darwin_universal
+            - name: ZIP The App
+              run: cd build/bin && zip -9 -r mncplay-darwin-universal.zip mncplay-darwin-universal.app
+            - name: Save Artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: mncplay-darwin-universal
+                  path: build/bin/mncplay-darwin-universal.zip
+
+    build-linux:
+        name: Build For Linux
+        runs-on: ubuntu-latest
+        needs: 
+            - build-linux-amd64
+            # - build-linux-arm
+            # - build-linux-arm64
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+    build-linux-amd64:
+        name: linux/amd64
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: APT Update
+              run: sudo apt-get update
+            - name: Install WebKit2 GTK 4.0
+              run: sudo apt-get install libwebkit2gtk-4.0-dev 
+            - name: Install GTK+ 3.0
+              run: sudo apt-get install libgtk-3-dev
+            - name: Install Go
+              uses: actions/setup-go@v5
+              with:
+                  go-version: '>=1.21'
+            - name: Install Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+            - name: Install Wails
+              run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+            - name: Build App
+              run: make build_linux_amd64
+            - name: UPX
+              run: upx -9 build/bin/mncplay-linux-amd64
+            - name: Save Artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: mncplay-linux-amd64
+                  path: build/bin/mncplay-linux-amd64
+
+    # build-linux-arm64:
+    #     name: linux/arm64
+    #     runs-on: ubuntu-latest
+    #     steps:
+    #         - name: Checkout
+    #           uses: actions/checkout@v4
+    #         - name: APT Update
+    #           run: sudo apt-get update
+    #         - name: Install WebKit2 GTK 4.0
+    #           run: sudo apt-get install libwebkit2gtk-4.0-dev 
+    #         - name: Install GTK+ 3.0
+    #           run: sudo apt-get install libgtk-3-dev
+    #         - name: Install Go
+    #           uses: actions/setup-go@v5
+    #           with:
+    #               go-version: '>=1.21'
+    #         - name: Install Node
+    #           uses: actions/setup-node@v4
+    #           with:
+    #               node-version: 20
+    #         - name: Install Wails
+    #           run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+    #         - name: Build App
+    #           run: make build_linux_arm64
+    #         - name: Save Artifact
+    #           uses: actions/upload-artifact@v4
+    #           with:
+    #               name: mncplay-linux-arm64
+    #               path: build/bin/mncplay-linux-arm64
+
+    # build-linux-arm:
+    #     name: linux/arm
+    #     runs-on: ubuntu-latest
+    #     steps:
+    #         - name: Checkout
+    #           uses: actions/checkout@v4
+    #         - name: APT Update
+    #           run: sudo apt-get update
+    #         - name: Install WebKit2 GTK 4.0
+    #           run: sudo apt-get install libwebkit2gtk-4.0-dev 
+    #         - name: Install GTK+ 3.0
+    #           run: sudo apt-get install libgtk-3-dev
+    #         - name: Install Go
+    #           uses: actions/setup-go@v5
+    #           with:
+    #               go-version: '>=1.21'
+    #         - name: Install Node
+    #           uses: actions/setup-node@v4
+    #           with:
+    #               node-version: 20
+    #         - name: Install Wails
+    #           run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+    #         - name: Build App
+    #           run: make build_linux_arm
+    #         - name: Save Artifact
+    #           uses: actions/upload-artifact@v4
+    #           with:
+    #               name: mncplay-linux-arm
+    #               path: build/bin/mncplay-linux-arm
