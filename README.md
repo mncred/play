@@ -1,4 +1,93 @@
-# MNCRED :: Play
+<div align="center">
+    <table>
+        <tr>
+            <td align="center" colspan="3">
+                <b>Загрузите последнюю версию MNCPlay</b>
+            </td>
+        </tr>
+        <tr>
+            <td align="center">Windows</td>
+            <td align="center">MacOS</td>
+            <td align="center">Linux</td>
+        </tr>
+        <tr>
+            <td>
+                <a href="https://github.com/mncred/play/releases/download/latest/mncplay-windows-amd64.exe" target="_blank">
+                    <img width="100" src="https://raw.githubusercontent.com/mncred/play/main/.github/assets/logo-windows.png"></img>
+                </a>
+            </td>
+            <td>
+                <a href="https://github.com/mncred/play/releases/download/latest/mncplay-darwin-universal.zip" target="_blank">
+                    <img width="100" src="https://raw.githubusercontent.com/mncred/play/main/.github/assets/logo-apple.png"></img>
+                </a>
+            </td>
+            <td>
+                <a href="https://github.com/mncred/play/releases/download/latest/mncplay-linux-amd64" target="_blank">
+                    <img width="100" src="https://raw.githubusercontent.com/mncred/play/main/.github/assets/logo-linux.png"></img>
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" colspan="3">
+                <a href="https://github.com/mncred/play/releases" target="_blank">все релизы и версии</a>
+            </td>
+        </tr>
+    </table>
+</div>
+
+# ✨ MNCPlay
+
+> Minecraft лаунчер для серверов проекта mnc.red
+
+## 🛠️ Для разработчиков
+
+> В соответствии с лицензией MIT вы можете использовать и модифицировать этот код под ваши нужды.
+
+### 💻 Стек технологий
+
+Лаунчер работает как нативное приложение, используя [GoLang](https://go.dev) сервер в качестве BackEnd и
+[Vue.js](https://vuejs.org) в качестве FrontEnd в связке с [Vuetify](https://vuetifyjs.com) MaterialDesign библиотекой
+компонентов. Сборка при помощи [Wails](https://wails.io).
+
+Поддержка архитектур Wails:
+
+- `windows/amd64` - Windows x64
+- `windows/386` - Windows x32
+- `windows/arm64` - Windows ARM
+- `darwin/amd64` - MacOS Intel
+- `darwin/arm64` - MacOS M1
+- `darwin/universal` - MacOS Intel и M1
+- `linux/amd64` - Linux x64
+- `linux/arm` - Данный клиент не удаётся собрать под эту архитектуру
+- `linux/arm64` - Данный клиент не удаётся собрать под эту архитектуру
+
+### 📘 Инструкция по сборке
+
+#### 🌎 Настройка окружения
+
+В общем случае вам потребуется установить GoLang, Node и Wails.
+
+Опционально возможно использовать UPX для сжатия билдов. Однако, UPX не поддерживает все доступные Wails архитектуры
+и ограничивается только `windows/amd64`, `windows/386`, `linux/amd64`.
+
+В зависимости от платформы на которой происходит сборка может потребоваться установить дополнительные компоненты,
+такие как GTK и WebKit2 GTK.
+Подробнее смотрите в [workflows/build.yml](.github/workflows/build.yaml)
+и в [документации Wails](https://wails.io/docs/gettingstarted/installation#platform-specific-dependencies).
+
+#### 📦 Сборка
+
+##### ⚙️ Используя Make
+
+Требуется установить `git`, т.к. сборка через `Make` поставляет информацию о текущем коммите в приложение.
+
+`make build_windows_amd64`
+
+##### 👉 Ручная сборка
+
+`wails build --webview2 embed --platform windows/amd64`
+
+
 
 A fully customizable Minecraft launcher and mod-server.
 Powered by [Wails](https://wails.io), and written with Go, TypeScript, Vue, Quasar
