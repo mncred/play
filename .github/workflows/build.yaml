@@ -132,9 +132,28 @@ jobs:
                     и оплату серверов. Финансовая поддержка ускорит выход обновлений.
 
                     <div align="center">
-                      <a href="https://pay.cloudtips.ru/p/46677d4f" target="_blank">
-                        <img width="200" src="https://raw.githubusercontent.com/mncred/play/main/.github/assets/logo-cloudtips.png"></img>
-                      </a>
+                      <table>
+                        <tr>
+                          <td align="center">
+                            CloudTips
+                          </td>
+                          <td align="center">
+                            Boosty
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <a href="https://pay.cloudtips.ru/p/46677d4f" target="_blank">
+                              <img width="150" src="https://raw.githubusercontent.com/mncred/play/main/.github/assets/qr-cloudtips-donate.png"></img>
+                            </a>
+                          </td>
+                          <td>
+                            <a href="https://boosty.to/jkulvich/donate" target="_blank">
+                              <img width="150" src="https://raw.githubusercontent.com/mncred/play/main/.github/assets/qr-boosty-donate.png"></img>
+                            </a>
+                          </td>
+                        </tr>
+                      </table>
                     </div>
 
                     ## ❤️ Благодарности
