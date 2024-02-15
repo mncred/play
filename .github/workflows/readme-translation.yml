@@ -14,10 +14,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 12.x 
-      - name: Adding README - Russian
+      - name: Adding README - English
         uses: dephraiim/translate-readme@main
         with:
-          LANG: ru
+          LANG: en-US
       - name: Adding README - Chinese Simplified
         uses: dephraiim/translate-readme@main
         with:
