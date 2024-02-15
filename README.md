@@ -1,3 +1,8 @@
+[![Visits Badge](https://badges.strrl.dev/visits/mncred/play)](https://badges.strrl.dev)
+![GitHub Tag](https://img.shields.io/github/v/tag/mncred/play)
+[![codebeat badge](https://codebeat.co/badges/0a36aca9-0bc9-4cac-9a33-c973a9dcf10c)](https://codebeat.co/projects/github-com-mncred-play-main)
+![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/mncred/play)
+
 <div align="center">
     <table>
         <tr>
@@ -35,21 +40,22 @@
     </table>
 </div>
 
-# ✨ MNCPlay
+# ![](https://api.iconify.design/mdi/rocket-launch.svg?height=32&color=royalblue) MNCPlay
 
 > Minecraft лаунчер для серверов проекта mnc.red
 
-## 🛠️ Для разработчиков
+## ![](https://api.iconify.design/mdi/code.svg?height=24&color=royalblue) Для разработчиков
 
 > В соответствии с лицензией MIT вы можете использовать и модифицировать этот код под ваши нужды.
 
-### 💻 Стек технологий
+### ![](https://api.iconify.design/mdi/crane.svg?height=20&color=royalblue) Стек технологий
 
 Лаунчер работает как нативное приложение, используя [GoLang](https://go.dev) сервер в качестве BackEnd и
 [Vue.js](https://vuejs.org) в качестве FrontEnd в связке с [Vuetify](https://vuetifyjs.com) MaterialDesign библиотекой
 компонентов. Сборка при помощи [Wails](https://wails.io).
 
-Поддержка архитектур Wails:
+<details>
+    <summary>Поддерживаемые архитектуры Wails</summary>
 
 - `windows/amd64` - Windows x64
 - `windows/386` - Windows x32
@@ -61,33 +67,46 @@
 - `linux/arm` - Данный клиент не удаётся собрать под эту архитектуру
 - `linux/arm64` - Данный клиент не удаётся собрать под эту архитектуру
 
-### 📘 Инструкция по сборке
+</details>
 
-#### 🌎 Настройка окружения
+### ![](https://api.iconify.design/mdi/application-brackets.svg?height=20&color=royalblue) Инструкция по сборке
 
-В общем случае вам потребуется установить GoLang, Node и Wails.
+#### ![](https://api.iconify.design/mdi/world.svg?height=16&color=royalblue) Настройка окружения
 
-Опционально возможно использовать UPX для сжатия билдов. Однако, UPX не поддерживает все доступные Wails архитектуры
+В общем случае вам потребуется установить `GoLang`, `Node` и `Wails`.
+
+Опционально возможно использовать `UPX` для сжатия билдов. Однако, `UPX` не поддерживает все доступные `Wails` архитектуры
 и ограничивается только `windows/amd64`, `windows/386`, `linux/amd64`.
 
 В зависимости от платформы на которой происходит сборка может потребоваться установить дополнительные компоненты,
-такие как GTK и WebKit2 GTK.
+такие как `GTK` и `WebKit2 GTK`.
 Подробнее смотрите в [workflows/build.yml](.github/workflows/build.yaml)
 и в [документации Wails](https://wails.io/docs/gettingstarted/installation#platform-specific-dependencies).
 
-#### 📦 Сборка
+#### ![](https://api.iconify.design/mdi/package-variant-closed.svg?height=16&color=royalblue) Сборка
 
-##### ⚙️ Используя Make
+##### ![](https://api.iconify.design/mdi/gear.svg?height=14&color=royalblue) Используя Make
 
 Требуется установить `git`, т.к. сборка через `Make` поставляет информацию о текущем коммите в приложение.
 
-`make build_windows_amd64`
+Для сборки под плаформу `windows/amd64` выполните:  
+`make build_windows_amd64`.
 
-##### 👉 Ручная сборка
+Готовый билд ищите в `build/bin`.
+Смотрите подробнее возможности сборки под отдельные платформы в [Makefile](Makefile).
+
+##### ![](https://api.iconify.design/mdi/car-manual-transmission.svg?height=14&color=royalblue) Ручная сборка
+
+Вместо использования `make` возможно осуществлять сборку напрямую через Wails, например:
 
 `wails build --webview2 embed --platform windows/amd64`
 
+---
 
+<details>
+    <summary>
+        Черновик
+    </summary>
 
 A fully customizable Minecraft launcher and mod-server.
 Powered by [Wails](https://wails.io), and written with Go, TypeScript, Vue, Quasar
@@ -252,3 +271,5 @@ spec:
         - optimizations-client
     run: -Xmx{{.props.ram.max}} ... -jar {{.minecraft.jar}}
 ```
+
+</details>
