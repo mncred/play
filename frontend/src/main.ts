@@ -1,20 +1,21 @@
-import '@quasar/extras/roboto-font/roboto-font.css'
-import '@quasar/extras/mdi-v7/mdi-v7.css'
-import 'quasar/src/css/index.sass'
-// Animations
-import '@quasar/extras/animate/fadeIn.css'
-import '@quasar/extras/animate/fadeOut.css'
-
+// Vue Core
 import App from './App.vue'
-import { Quasar } from 'quasar'
 import { createApp } from 'vue'
-import { createPinia } from 'pinia'
-import i18n from './assets/locales'
-import router from './router'
+// Plugins
+import pluginI18n from './plugins/i18n'
+import pluginLogger from './plugins/logger'
+import pluginPinia from './plugins/pinia'
+import pluginRouter from './plugins/router'
+import pluginVuetify from './plugins/vuetify'
 
-createApp(App)
-    .use(i18n)
-    .use(createPinia())
-    .use(router)
-    .use(Quasar, {})
-    .mount('#app')
+// Async app installation context.
+// Some plugins requires async actions to be done before install.
+(async () => {
+    createApp(App)
+        .use(await pluginLogger())
+        .use(await pluginI18n())
+        .use(await pluginPinia())
+        .use(await pluginRouter())
+        .use(await pluginVuetify())
+        .mount('#app')
+})()

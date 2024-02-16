@@ -1,5 +1,4 @@
-import { quasar, transformAssetUrls } from '@quasar/vite-plugin'
-
+import ViteYaml from '@modyfi/vite-plugin-yaml'
 import { defineConfig } from 'vite'
 import path from "path"
 import vue from '@vitejs/plugin-vue'
@@ -9,12 +8,8 @@ const __dirname = './'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    vue({
-      template: { transformAssetUrls }
-    }),
-    quasar({
-      sassVariables: 'src/assets/styles/quasar-variables.sass'
-    }),
+    vue(),
+    ViteYaml(),
   ],
   resolve: {
     alias: {

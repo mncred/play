@@ -4,10 +4,13 @@ import (
 	"context"
 	"embed"
 	"fmt"
+	"io"
 	"os"
+	"path"
 	"strconv"
 	"time"
 
+	"github.com/sirupsen/logrus"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
@@ -17,8 +20,7 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 
 	"github.com/mncred/mncplay/internal/build"
-	"github.com/mncred/mncplay/internal/config"
-	"github.com/mncred/mncplay/internal/logger"
+	logrusAdapter "github.com/mncred/mncplay/internal/logger/adapter/logrus"
 	"github.com/mncred/mncplay/internal/system"
 )
 
@@ -29,43 +31,32 @@ var assets embed.FS
 var icon []byte
 
 func main() {
-	// Read the App config
-	configProvider := config.Provider{}
-	if err := configProvider.LoadDefault(); err != nil {
-		fmt.Printf("unable to load config: %v\n", err)
-		os.Exit(1)
-	}
-	config := configProvider.Get()
+	// Configure global logger
+	initLogger(build.LogsDir, build.LogLevel)
+
+	// Configure local loggers
+	mainLogger := logrusAdapter.Provide(logrus.WithField("module", "main"))
+	wailsLogger := logrusAdapter.Provide(logrus.WithField("module", "wails"))
+	frontendLogger := logrusAdapter.Provide(logrus.WithField("module", "frontend"))
 
 	// Wails App Context
 	var wailsCtx context.Context
 
-	// Provide a logger
-	lg := logger.New().
-		WithName(config.Id).
-		WithLevel(logger.ParseLevel(config.Debug.Log.Level)).
-		WithOutput(config.Debug.Log.Output).
-		WithMiddleware(FrontendMiddleware(func(script string) {
-			if wailsCtx != nil {
-				runtime.WindowExecJS(wailsCtx, script)
-			}
-		}))
-
 	// Create application with options
 	if err := wails.Run(&options.App{
-		Logger:           lg.WithName("wails"),
-		Title:            config.Window.Header.Title,
-		Width:            config.Window.Width.Default,
-		Height:           config.Window.Height.Default,
-		MinWidth:         config.Window.Width.Min,
-		MinHeight:        config.Window.Height.Min,
-		MaxWidth:         config.Window.Width.Max,
-		MaxHeight:        config.Window.Height.Max,
-		DisableResize:    !config.Window.Resizable,
-		Frameless:        !config.Window.Header.Native,
+		Logger:           wailsLogger,
+		Title:            build.WindowTitle,
+		Width:            func() int { v, _ := strconv.ParseInt(build.WindowWidth, 10, 32); return int(v) }(),
+		Height:           func() int { v, _ := strconv.ParseInt(build.WindowHeight, 10, 32); return int(v) }(),
+		MinWidth:         func() int { v, _ := strconv.ParseInt(build.WindowWidthMin, 10, 32); return int(v) }(),
+		MinHeight:        func() int { v, _ := strconv.ParseInt(build.WindowHeightMin, 10, 32); return int(v) }(),
+		MaxWidth:         func() int { v, _ := strconv.ParseInt(build.WindowWidthMax, 10, 32); return int(v) }(),
+		MaxHeight:        func() int { v, _ := strconv.ParseInt(build.WindowHeightMax, 10, 32); return int(v) }(),
+		DisableResize:    func() bool { v, _ := strconv.ParseBool(build.WindowHeightMax); return v }(),
+		Frameless:        func() bool { v, _ := strconv.ParseBool(build.WindowFrameless); return v }(),
 		BackgroundColour: &options.RGBA{R: 255, G: 255, B: 255, A: 0},
 		Debug: options.Debug{
-			OpenInspectorOnStartup: config.Debug.Inspector,
+			OpenInspectorOnStartup: true,
 		},
 		Mac: &mac.Options{
 			WebviewIsTransparent: true,
@@ -85,9 +76,8 @@ func main() {
 			Assets: assets,
 		},
 		Bind: []interface{}{
-			lg.WithName("front").Pointer(),
-			&configProvider,
-			&build.BuildInfo{},
+			frontendLogger,
+			&build.Build{},
 			&system.Info{},
 			&system.System{},
 		},
@@ -95,79 +85,78 @@ func main() {
 			wailsCtx = ctx
 
 			// Basic log info
-			lg.Print("log started: " + time.Now().Format(time.RFC1123Z))
-			lg.Print("build time: " + build.BuildTime)
-			lg.Print("build origin: " + build.BuildOrigin)
-			lg.Print("build branch: " + build.BuildBranch)
-			lg.Print("build commit: " + build.BuildCommit)
-			lg.Print("build commit author: " + build.BuildCommitAuthor)
-			lg.Print("build commit email: " + build.BuildCommitEmail)
-			lg.Print("build compiler: " + build.BuildCompiler)
-			lg.Print("build wails: " + build.BuildWails)
+			mainLogger.Info("log started: " + time.Now().Format(time.RFC1123Z))
+			mainLogger.Info("build OS: " + build.OS)
+			mainLogger.Info("build arch: " + build.Arch)
+			mainLogger.Info("build time: " + build.Time)
+			mainLogger.Info("build origin: " + build.Origin)
+			mainLogger.Info("build branch: " + build.Branch)
+			mainLogger.Info("build commit: " + build.Commit)
+			mainLogger.Info("build commit author: " + build.CommitAuthor)
+			mainLogger.Info("build commit email: " + build.CommitEmail)
+			mainLogger.Info("build compiler: " + build.Compiler)
+			mainLogger.Info("build wails: " + build.Wails)
+			mainLogger.Info("build log level: " + build.LogLevel)
 
 			runtime.EventsOn(ctx, "window:unminimise", func(data ...any) {
 				runtime.WindowUnminimise(ctx)
 			})
 		},
 		SingleInstanceLock: &options.SingleInstanceLock{
-			UniqueId: config.Id,
+			UniqueId: build.AppId,
 			OnSecondInstanceLaunch: func(secondInstanceData options.SecondInstanceData) {
 				runtime.WindowUnminimise(wailsCtx)
 				runtime.Show(wailsCtx)
 			},
 		},
 	}); err != nil {
-		lg.Info("please, use Wails to build: https://wails.io")
-		lg.Fatal(fmt.Sprintf("unable to launch app: %v\n", err))
+		mainLogger.Info("please, use Wails to build: https://wails.io")
+		mainLogger.Fatal(fmt.Sprintf("unable to launch app: %v\n", err))
 	}
 }
 
-// FrontendMiddleware is the frontend logger proxy with formatters.
-func FrontendMiddleware(handler func(script string)) func(level logger.Level, line string) string {
-	return func(level logger.Level, line string) string {
-		badgeStyleTrace := `color: white; background: black; margin: 0 4px 0 0; border-radius: 2px; font-weight: bold;`
-		badgeStyleDebug := `color: white; background: gray; margin: 0 4px 0 0; border-radius: 2px; font-weight: bold;`
-		badgeStyleInfo := `color: white; background: blue; margin: 0 4px 0 0; border-radius: 2px; font-weight: bold;`
-		badgeStyleWarning := `color: white; background: orange; margin: 0 4px 0 0; border-radius: 2px; font-weight: bold;`
-		badgeStyleError := `color: white; background: red; margin: 0 4px 0 0; border-radius: 2px; font-weight: bold;`
-		badgeStyleFatal := `color: white; background: red; margin: 0 4px 0 0; border-radius: 2px; font-weight: bold;`
-		badgeStylePrint := `color: white; background: gray; margin: 0 4px 0 0; border-radius: 2px; font-weight: bold;`
+func initLogger(logsDir string, level string) {
+	// log formatter
+	logrus.SetFormatter(&logrus.JSONFormatter{})
 
-		badgeStyle := ""
-		badgeText := ""
-		script := "console."
-		switch level {
-		case logger.LevelTrace:
-			script += "debug"
-			badgeStyle = badgeStyleTrace
-			badgeText = "TRC"
-		case logger.LevelDebug:
-			script += "debug"
-			badgeStyle = badgeStyleDebug
-			badgeText = "DBG"
-		case logger.LevelInfo:
-			script += "info"
-			badgeStyle = badgeStyleInfo
-			badgeText = "INF"
-		case logger.LevelWarning:
-			script += "warn"
-			badgeStyle = badgeStyleWarning
-			badgeText = "WRN"
-		case logger.LevelError:
-			script += "error"
-			badgeStyle = badgeStyleError
-			badgeText = "ERR"
-		case logger.LevelFatal:
-			script += "error"
-			badgeStyle = badgeStyleFatal
-			badgeText = "FTL"
-		case logger.LevelPrint:
-			script += "log"
-			badgeStyle = badgeStylePrint
-			badgeText = "PRN"
-		}
-		script += fmt.Sprintf("('%%c%%s%%c%%s', '%s', '%s', '', %s)", badgeStyle, badgeText, strconv.Quote(line))
-		handler(script)
-		return line
+	// log level
+	lvl, err := logrus.ParseLevel(level)
+	if err != nil {
+		fmt.Printf("build log level not defined, use debug level: %v\n", err)
+		lvl = logrus.DebugLevel
 	}
+	logrus.SetLevel(lvl)
+
+	// log outputs (stderr + file / stderr only)
+	var wr io.Writer = os.Stderr
+	if len(build.LogsDir) > 0 {
+		os.MkdirAll(logsDir, os.ModePerm)
+
+		// rewrite latest log file
+		latestFile, err := os.OpenFile(
+			path.Join(logsDir, "latest.log"),
+			os.O_CREATE|os.O_TRUNC|os.O_WRONLY,
+			os.ModePerm,
+		)
+		if err != nil {
+			fmt.Printf("unable to create latest log file, logs won't be saved: %v\n", err)
+			return
+		}
+
+		// timestamped log file
+		timestampedFile, err := os.OpenFile(
+			path.Join(logsDir, strconv.FormatInt(time.Now().Unix(), 10)+".log"),
+			os.O_CREATE|os.O_WRONLY,
+			os.ModePerm,
+		)
+		if err != nil {
+			fmt.Printf("unable to create timestamped log file, logs won't be saved: %v\n", err)
+			return
+		}
+
+		wr = io.MultiWriter(os.Stderr, latestFile, timestampedFile)
+	} else {
+		fmt.Printf("build logs dir not defined, logs won't be created\n")
+	}
+	logrus.SetOutput(wr)
 }

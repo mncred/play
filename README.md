@@ -40,15 +40,15 @@
     </table>
 </div>
 
-# ![](https://api.iconify.design/mdi/rocket-launch.svg?height=32&color=royalblue) MNCPlay
+# ![](https://api.iconify.design/octicon/rocket-16.svg?height=32&color=royalblue) MNCPlay
 
 > Minecraft лаунчер для серверов проекта mnc.red
 
-## ![](https://api.iconify.design/mdi/code.svg?height=24&color=royalblue) Для разработчиков
+## ![](https://api.iconify.design/octicon/code-16.svg?height=24&color=royalblue) Для разработчиков
 
 > В соответствии с лицензией MIT вы можете использовать и модифицировать этот код под ваши нужды.
 
-### ![](https://api.iconify.design/mdi/crane.svg?height=20&color=royalblue) Стек технологий
+### ![](https://api.iconify.design/octicon/stack-16.svg?height=20&color=royalblue) Стек технологий
 
 Лаунчер работает как нативное приложение, используя [GoLang](https://go.dev) сервер в качестве BackEnd и
 [Vue.js](https://vuejs.org) в качестве FrontEnd в связке с [Vuetify](https://vuetifyjs.com) MaterialDesign библиотекой
@@ -69,9 +69,9 @@
 
 </details>
 
-### ![](https://api.iconify.design/mdi/application-brackets.svg?height=20&color=royalblue) Инструкция по сборке
+### ![](https://api.iconify.design/octicon/gear-16.svg?height=20&color=royalblue) Инструкция по сборке
 
-#### ![](https://api.iconify.design/mdi/world.svg?height=16&color=royalblue) Настройка окружения
+#### ![](https://api.iconify.design/octicon/telescope-16.svg?height=16&color=royalblue) Настройка окружения
 
 В общем случае вам потребуется установить `GoLang`, `Node` и `Wails`.
 
@@ -83,9 +83,9 @@
 Подробнее смотрите в [workflows/build.yml](.github/workflows/build.yaml)
 и в [документации Wails](https://wails.io/docs/gettingstarted/installation#platform-specific-dependencies).
 
-#### ![](https://api.iconify.design/mdi/package-variant-closed.svg?height=16&color=royalblue) Сборка
+#### ![](https://api.iconify.design/octicon/package-16.svg?height=16&color=royalblue) Сборка
 
-##### ![](https://api.iconify.design/mdi/gear.svg?height=14&color=royalblue) Используя Make
+##### ![](https://api.iconify.design/octicon/sync-16.svg?height=14&color=royalblue) Используя Make
 
 Требуется установить `git`, т.к. сборка через `Make` поставляет информацию о текущем коммите в приложение.
 
@@ -95,7 +95,7 @@
 Готовый билд ищите в `build/bin`.
 Смотрите подробнее возможности сборки под отдельные платформы в [Makefile](Makefile).
 
-##### ![](https://api.iconify.design/mdi/car-manual-transmission.svg?height=14&color=royalblue) Ручная сборка
+##### ![](https://api.iconify.design/octicon/command-palette-16.svg?height=14&color=royalblue) Ручная сборка
 
 Вместо использования `make` возможно осуществлять сборку напрямую через Wails, например:
 

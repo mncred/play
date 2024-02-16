@@ -1,0 +1,7 @@
+icon: Ru
+welcome: Добро пожаловать
+pages:
+    welcome:
+        title: Приветствие
+    auth:
+        title: Авторизация

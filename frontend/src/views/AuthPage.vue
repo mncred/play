@@ -1,12 +1,13 @@
 <template>
-    <QPage class="q-pa-md">
-        <QBtn :to="{ name: 'welcome' }">NEXT</QBtn>
-        AUTH PAGE
-    </QPage>
+    AuthPage
+    <VBtn @click="router.push({ name: Page.Welcome })">welcome</VBtn>
 </template>
 
-<script lang="ts" setup>
-import { QBtn, QPage } from 'quasar'
+<script lang="ts" setup async>
+import { useRouter } from 'vue-router'
+import { Page } from '@/plugins/router'
+
+const router = useRouter()
 </script>
 
-<style lang="scss"></style>
+<style lang="scss"></style>@/plugins/router
