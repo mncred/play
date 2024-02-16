@@ -1,37 +1,29 @@
-# Security Policies and Procedures
+# Политики и процедуры безопасности
 
-This document outlines security procedures and general policies for all
-ESSENTIAL KAOS projects.
+В этом документе излагаются процедуры обеспечения безопасности и общие политики для всех проектов MNCRED.
 
-- [Security Policies and Procedures](#security-policies-and-procedures)
-  - [Reporting a Bug](#reporting-a-bug)
-  - [Disclosure Policy](#disclosure-policy)
+- [Политики и процедуры безопасности](#политики-и-процедуры-безопасности)
+  - [Сообщить об ошибке](#сообщить-об-ошибке)
+  - [Политика раскрытия информации](#политика-раскрытия-информации)
 
-## Reporting a Bug
+## Сообщить об ошибке
 
-The MNCRED team and community take all security bugs in our projects
-very seriously. Thank you for improving the security of our project. We
-appreciate your efforts and responsible disclosure and will make every effort
-to acknowledge your contributions.
+Сообщайте о проблемах с безопасностью на почту: jkulvichi@gmail.com
 
-Report security bugs by emailing our security team at jkulvichi@gmail.com
+В течение нескольких дней мы проверим информацию и сообщим о результатах проверки.
+Если необходимо - мы запросим дополнительную информацию о проблеме и ваши рекомендации.
+В итоге мы расскажем о шагах, которые мы предпримем для устранения проблемы.
 
-The security team will acknowledge your email within 48 hours and will send a
-more detailed response within 48 hours, indicating the next steps in handling
-your report. After the initial reply to your report, the security team will
-endeavor to keep you informed of the progress towards a fix and full
-announcement, and may ask for additional information or guidance.
+Сообщайте об ошибках безопасности в сторонних зависимостях лицу или команде,
+поддерживающим эти зависимости.
 
-Report security bugs in third-party dependencies to the person or team
-maintaining the dependencies.
+## Политика раскрытия информации
 
-## Disclosure Policy
+Когда команда безопасности получит отчет об ошибке безопасности - он будет назначен основному разработчику.
+Этот человек будет координировать процесс исправления и выпуска,
+включающий следующие шаги:
 
-When the security team receives a security bug report, they will assign it to a
-primary handler. This person will coordinate the fix and release process,
-involving the following steps:
-
-  * Confirm the problem and determine the affected versions;
-  * Audit code to find any similar potential problems;
-  * Prepare fixes for all releases still under maintenance. These fixes will be
-    released as fast as possible.
+- Подтверждение проблемы и определение уязвимых версий;
+- Проверка кода, на предмет любых аналогичных потенциальных проблем;
+- Подготовка исправления для всех версий продукта, которые все еще находятся в стадии поддержки. Исправления будут
+  выпущены как можно быстрее.
