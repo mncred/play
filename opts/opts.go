@@ -1,8 +1,9 @@
-package build
+package opts
 
+// --ldflags vars
 var (
-	// Time - compilation time
-	Time = ""
+	// BuildTime - compilation time
+	BuildTime = ""
 	// Origin - compilation git origin
 	Origin = ""
 	// Branch - compilation git branch
@@ -55,8 +56,8 @@ var (
 	WindowDisableClose = ""
 )
 
-type Info struct {
-	Time                  string `json:"time"`
+type Options struct {
+	BuildTime             string `json:"buildTime"`
 	Origin                string `json:"origin"`
 	Branch                string `json:"branch"`
 	Commit                string `json:"commit"`
@@ -84,35 +85,38 @@ type Info struct {
 	WindowDisableClose    string `json:"windowDisableClose"`
 }
 
-type Build struct{}
+// Opts provides global list of the app options
+var Opts = Options{
+	BuildTime:             BuildTime,
+	Origin:                Origin,
+	Branch:                Branch,
+	Commit:                Commit,
+	CommitAuthor:          CommitAuthor,
+	CommitEmail:           CommitEmail,
+	CommitTag:             CommitTag,
+	Compiler:              Compiler,
+	Wails:                 Wails,
+	OS:                    OS,
+	Arch:                  Arch,
+	LogLevel:              LogLevel,
+	LogsDir:               LogsDir,
+	AppId:                 AppId,
+	WindowTitle:           WindowTitle,
+	WindowWidth:           WindowWidth,
+	WindowHeight:          WindowHeight,
+	WindowWidthMin:        WindowWidthMin,
+	WindowWidthMax:        WindowWidthMax,
+	WindowHeightMin:       WindowHeightMin,
+	WindowHeightMax:       WindowHeightMax,
+	WindowDisableResize:   WindowDisableResize,
+	WindowFrameless:       WindowFrameless,
+	WindowDisableMaximize: WindowDisableMaximize,
+	WindowDisableMinimize: WindowDisableMinimize,
+	WindowDisableClose:    WindowDisableClose,
+}
 
-func (b *Build) Info() Info {
-	return Info{
-		Time:                  Time,
-		Origin:                Origin,
-		Branch:                Branch,
-		Commit:                Commit,
-		CommitAuthor:          CommitAuthor,
-		CommitEmail:           CommitEmail,
-		CommitTag:             CommitTag,
-		Compiler:              Compiler,
-		Wails:                 Wails,
-		OS:                    OS,
-		Arch:                  Arch,
-		LogLevel:              LogLevel,
-		LogsDir:               LogsDir,
-		AppId:                 AppId,
-		WindowTitle:           WindowTitle,
-		WindowWidth:           WindowWidth,
-		WindowHeight:          WindowHeight,
-		WindowWidthMin:        WindowWidthMin,
-		WindowWidthMax:        WindowWidthMax,
-		WindowHeightMin:       WindowHeightMin,
-		WindowHeightMax:       WindowHeightMax,
-		WindowDisableResize:   WindowDisableResize,
-		WindowFrameless:       WindowFrameless,
-		WindowDisableMaximize: WindowDisableMaximize,
-		WindowDisableMinimize: WindowDisableMinimize,
-		WindowDisableClose:    WindowDisableClose,
-	}
+// Get returns self options.
+// This is a wrapper to pass into Wails Front-End.
+func (o Options) Get() Options {
+	return o
 }

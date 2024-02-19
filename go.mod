@@ -1,4 +1,4 @@
-module github.com/mncred/mncplay
+module mncplay
 
 go 1.21
 

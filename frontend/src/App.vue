@@ -2,9 +2,7 @@
   <VApp id="window" theme="dark">
     <VLayout>
       <Suspense>
-        <!-- ! TODO: It isn't correct to bind to COMPILER OS, need fetch OS of CURRENT machine -->
-        <WindowTitle draggable :appearance="uaparser.getOS().name === 'Mac OS' ? 'macos' : 'common'" :icon="mdiCube"
-          iconColor="red" />
+        <WindowTitle />
       </Suspense>
       <VMain>
         <RouterView v-slot="{ Component }">
@@ -26,12 +24,9 @@
 
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
-import { UAParser } from 'ua-parser-js'
 import { RouterView } from 'vue-router'
 import { mdiCube } from '@mdi/js'
 import WindowTitle from '@/components/organisms/WindowTitle/WindowTitle.vue'
-
-const uaparser = new UAParser()
 
 // Disable right clicking
 document.addEventListener('contextmenu', e => {
@@ -44,12 +39,6 @@ document.addEventListener('mousedown', e => {
     e.preventDefault()
   }
 })
-
-const fancyWindow = computed(() => ['Mac OS', 'Windows'].includes(uaparser.getOS().name ?? ''))
-const borderRadius = computed(() => {
-  if (!fancyWindow.value) return '0px'
-  return `8px`
-})
 </script>
 
 <style lang="scss" scoped async>
@@ -57,7 +46,7 @@ const borderRadius = computed(() => {
   overflow: hidden;
   width: 100vw;
   height: 100vh;
-  border-radius: v-bind('borderRadius');
+  border-radius: 8px;
   transition: .3s ease-in-out;
   border: 1px solid rgba(255, 255, 255, .1);
 }

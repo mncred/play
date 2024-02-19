@@ -1,7 +1,7 @@
-export namespace build {
+export namespace opts {
 	
-	export class Info {
-	    time: string;
+	export class Options {
+	    buildTime: string;
 	    origin: string;
 	    branch: string;
 	    commit: string;
@@ -29,12 +29,12 @@ export namespace build {
 	    windowDisableClose: string;
 	
 	    static createFrom(source: any = {}) {
-	        return new Info(source);
+	        return new Options(source);
 	    }
 	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.time = source["time"];
+	        this.buildTime = source["buildTime"];
 	        this.origin = source["origin"];
 	        this.branch = source["branch"];
 	        this.commit = source["commit"];

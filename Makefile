@@ -38,35 +38,35 @@ BUILD_WINDOW_DISABLE_MINIMIZE ?=
 BUILD_WINDOW_DISABLE_CLOSE ?= 
 
 LDFLAGS='\
-	-X "github.com/mncred/mncplay/internal/build.Time=${BUILD_TIME}" \
-	-X "github.com/mncred/mncplay/internal/build.Origin=${BUILD_ORIGIN}" \
-	-X "github.com/mncred/mncplay/internal/build.Branch=${BUILD_BRANCH}" \
-	-X "github.com/mncred/mncplay/internal/build.Commit=${BUILD_COMMIT}" \
-	-X "github.com/mncred/mncplay/internal/build.CommitAuthor=${BUILD_COMMIT_AUTHOR}" \
-	-X "github.com/mncred/mncplay/internal/build.CommitEmail=${BUILD_COMMIT_EMAIL}" \
-	-X "github.com/mncred/mncplay/internal/build.CommitTag=${BUILD_TAG}" \
+	-X "mncplay/opts.Time=${BUILD_TIME}" \
+	-X "mncplay/opts.Origin=${BUILD_ORIGIN}" \
+	-X "mncplay/opts.Branch=${BUILD_BRANCH}" \
+	-X "mncplay/opts.Commit=${BUILD_COMMIT}" \
+	-X "mncplay/opts.CommitAuthor=${BUILD_COMMIT_AUTHOR}" \
+	-X "mncplay/opts.CommitEmail=${BUILD_COMMIT_EMAIL}" \
+	-X "mncplay/opts.CommitTag=${BUILD_TAG}" \
 \
-	-X "github.com/mncred/mncplay/internal/build.Compiler=${BUILD_COMPILER}" \
-	-X "github.com/mncred/mncplay/internal/build.Wails=${BUILD_WAILS}" \
-	-X "github.com/mncred/mncplay/internal/build.OS=${BUILD_OS}" \
-	-X "github.com/mncred/mncplay/internal/build.Arch=${BUILD_ARCH}" \
+	-X "mncplay/opts.Compiler=${BUILD_COMPILER}" \
+	-X "mncplay/opts.Wails=${BUILD_WAILS}" \
+	-X "mncplay/opts.OS=${BUILD_OS}" \
+	-X "mncplay/opts.Arch=${BUILD_ARCH}" \
 \
-	-X "github.com/mncred/mncplay/internal/build.LogLevel=${BUILD_LOG_LEVEL}" \
-	-X "github.com/mncred/mncplay/internal/build.LogsDir=${BUILD_LOGS_DIR}" \
+	-X "mncplay/opts.LogLevel=${BUILD_LOG_LEVEL}" \
+	-X "mncplay/opts.LogsDir=${BUILD_LOGS_DIR}" \
 \
-	-X "github.com/mncred/mncplay/internal/build.AppId=${BUILD_APP_ID}" \
-	-X "github.com/mncred/mncplay/internal/build.WindowTitle=${BUILD_WINDOW_TITLE}" \
-	-X "github.com/mncred/mncplay/internal/build.WindowWidth=${BUILD_WINDOW_WIDTH}" \
-	-X "github.com/mncred/mncplay/internal/build.WindowHeight=${BUILD_WINDOW_HEIGHT}" \
-	-X "github.com/mncred/mncplay/internal/build.WindowWidthMin=${BUILD_WINDOW_WIDTH_MIN}" \
-	-X "github.com/mncred/mncplay/internal/build.WindowWidthMax=${BUILD_WINDOW_WIDTH_MAX}" \
-	-X "github.com/mncred/mncplay/internal/build.WindowHeightMin=${BUILD_WINDOW_HEIGHT_MIN}" \
-	-X "github.com/mncred/mncplay/internal/build.WindowHeightMax=${BUILD_WINDOW_HEIGHT_MAX}" \
-	-X "github.com/mncred/mncplay/internal/build.WindowDisableResize=${BUILD_WINDOW_DISABLE_RESIZE}" \
-	-X "github.com/mncred/mncplay/internal/build.WindowFrameless=${BUILD_WINDOW_FRAMELESS}" \
-	-X "github.com/mncred/mncplay/internal/build.WindowDisableMaximize=${BUILD_WINDOW_DISABLE_MAXIMIZE}" \
-	-X "github.com/mncred/mncplay/internal/build.WindowDisableMinimize=${BUILD_WINDOW_DISABLE_MINIMIZE}" \
-	-X "github.com/mncred/mncplay/internal/build.WindowDisableClose=${BUILD_WINDOW_DISABLE_CLOSE}" \
+	-X "mncplay/opts.AppId=${BUILD_APP_ID}" \
+	-X "mncplay/opts.WindowTitle=${BUILD_WINDOW_TITLE}" \
+	-X "mncplay/opts.WindowWidth=${BUILD_WINDOW_WIDTH}" \
+	-X "mncplay/opts.WindowHeight=${BUILD_WINDOW_HEIGHT}" \
+	-X "mncplay/opts.WindowWidthMin=${BUILD_WINDOW_WIDTH_MIN}" \
+	-X "mncplay/opts.WindowWidthMax=${BUILD_WINDOW_WIDTH_MAX}" \
+	-X "mncplay/opts.WindowHeightMin=${BUILD_WINDOW_HEIGHT_MIN}" \
+	-X "mncplay/opts.WindowHeightMax=${BUILD_WINDOW_HEIGHT_MAX}" \
+	-X "mncplay/opts.WindowDisableResize=${BUILD_WINDOW_DISABLE_RESIZE}" \
+	-X "mncplay/opts.WindowFrameless=${BUILD_WINDOW_FRAMELESS}" \
+	-X "mncplay/opts.WindowDisableMaximize=${BUILD_WINDOW_DISABLE_MAXIMIZE}" \
+	-X "mncplay/opts.WindowDisableMinimize=${BUILD_WINDOW_DISABLE_MINIMIZE}" \
+	-X "mncplay/opts.WindowDisableClose=${BUILD_WINDOW_DISABLE_CLOSE}" \
 '
 
 dev:

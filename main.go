@@ -19,9 +19,9 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options/windows"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 
-	"github.com/mncred/mncplay/internal/build"
-	logrusAdapter "github.com/mncred/mncplay/internal/logger/adapter/logrus"
-	"github.com/mncred/mncplay/internal/system"
+	logrusAdapter "mncplay/internal/logger/adapter/logrus"
+	"mncplay/internal/system"
+	"mncplay/opts"
 )
 
 //go:embed all:frontend/dist
@@ -32,7 +32,7 @@ var icon []byte
 
 func main() {
 	// Configure global logger
-	initLogger(build.LogsDir, build.LogLevel)
+	initLogger(opts.LogsDir, opts.LogLevel)
 
 	// Configure local loggers
 	mainLogger := logrusAdapter.Provide(logrus.WithField("module", "main"))
@@ -45,15 +45,15 @@ func main() {
 	// Create application with options
 	if err := wails.Run(&options.App{
 		Logger:           wailsLogger,
-		Title:            build.WindowTitle,
-		Width:            func() int { v, _ := strconv.ParseInt(build.WindowWidth, 10, 32); return int(v) }(),
-		Height:           func() int { v, _ := strconv.ParseInt(build.WindowHeight, 10, 32); return int(v) }(),
-		MinWidth:         func() int { v, _ := strconv.ParseInt(build.WindowWidthMin, 10, 32); return int(v) }(),
-		MinHeight:        func() int { v, _ := strconv.ParseInt(build.WindowHeightMin, 10, 32); return int(v) }(),
-		MaxWidth:         func() int { v, _ := strconv.ParseInt(build.WindowWidthMax, 10, 32); return int(v) }(),
-		MaxHeight:        func() int { v, _ := strconv.ParseInt(build.WindowHeightMax, 10, 32); return int(v) }(),
-		DisableResize:    func() bool { v, _ := strconv.ParseBool(build.WindowHeightMax); return v }(),
-		Frameless:        func() bool { v, _ := strconv.ParseBool(build.WindowFrameless); return v }(),
+		Title:            opts.WindowTitle,
+		Width:            func() int { v, _ := strconv.ParseInt(opts.WindowWidth, 10, 32); return int(v) }(),
+		Height:           func() int { v, _ := strconv.ParseInt(opts.WindowHeight, 10, 32); return int(v) }(),
+		MinWidth:         func() int { v, _ := strconv.ParseInt(opts.WindowWidthMin, 10, 32); return int(v) }(),
+		MinHeight:        func() int { v, _ := strconv.ParseInt(opts.WindowHeightMin, 10, 32); return int(v) }(),
+		MaxWidth:         func() int { v, _ := strconv.ParseInt(opts.WindowWidthMax, 10, 32); return int(v) }(),
+		MaxHeight:        func() int { v, _ := strconv.ParseInt(opts.WindowHeightMax, 10, 32); return int(v) }(),
+		DisableResize:    func() bool { v, _ := strconv.ParseBool(opts.WindowHeightMax); return v }(),
+		Frameless:        func() bool { v, _ := strconv.ParseBool(opts.WindowFrameless); return v }(),
 		BackgroundColour: &options.RGBA{R: 255, G: 255, B: 255, A: 0},
 		Debug: options.Debug{
 			OpenInspectorOnStartup: true,
@@ -77,7 +77,7 @@ func main() {
 		},
 		Bind: []interface{}{
 			frontendLogger,
-			&build.Build{},
+			&opts.Opts,
 			&system.Info{},
 			&system.System{},
 		},
@@ -86,24 +86,24 @@ func main() {
 
 			// Basic log info
 			mainLogger.Info("log started: " + time.Now().Format(time.RFC1123Z))
-			mainLogger.Info("build OS: " + build.OS)
-			mainLogger.Info("build arch: " + build.Arch)
-			mainLogger.Info("build time: " + build.Time)
-			mainLogger.Info("build origin: " + build.Origin)
-			mainLogger.Info("build branch: " + build.Branch)
-			mainLogger.Info("build commit: " + build.Commit)
-			mainLogger.Info("build commit author: " + build.CommitAuthor)
-			mainLogger.Info("build commit email: " + build.CommitEmail)
-			mainLogger.Info("build compiler: " + build.Compiler)
-			mainLogger.Info("build wails: " + build.Wails)
-			mainLogger.Info("build log level: " + build.LogLevel)
+			mainLogger.Info("build OS: " + opts.OS)
+			mainLogger.Info("build arch: " + opts.Arch)
+			mainLogger.Info("build time: " + opts.BuildTime)
+			mainLogger.Info("build origin: " + opts.Origin)
+			mainLogger.Info("build branch: " + opts.Branch)
+			mainLogger.Info("build commit: " + opts.Commit)
+			mainLogger.Info("build commit author: " + opts.CommitAuthor)
+			mainLogger.Info("build commit email: " + opts.CommitEmail)
+			mainLogger.Info("build compiler: " + opts.Compiler)
+			mainLogger.Info("build wails: " + opts.Wails)
+			mainLogger.Info("build log level: " + opts.LogLevel)
 
 			runtime.EventsOn(ctx, "window:unminimise", func(data ...any) {
 				runtime.WindowUnminimise(ctx)
 			})
 		},
 		SingleInstanceLock: &options.SingleInstanceLock{
-			UniqueId: build.AppId,
+			UniqueId: opts.AppId,
 			OnSecondInstanceLaunch: func(secondInstanceData options.SecondInstanceData) {
 				runtime.WindowUnminimise(wailsCtx)
 				runtime.Show(wailsCtx)
@@ -129,7 +129,7 @@ func initLogger(logsDir string, level string) {
 
 	// log outputs (stderr + file / stderr only)
 	var wr io.Writer = os.Stderr
-	if len(build.LogsDir) > 0 {
+	if len(logsDir) > 0 {
 		os.MkdirAll(logsDir, os.ModePerm)
 
 		// rewrite latest log file
