@@ -10,7 +10,7 @@ BUILD_WEBVIEW2 ?= embed
 # NSIS="--nsis"
 
 # Built-in App Parameters
-BUILD_TIME ?= $(shell date '+%d.%m.%y %H:%M:%S %z')
+BUILD_TIME ?= $(shell date '+%Y-%m-%dT%H:%M:%S%z')
 BUILD_ORIGIN ?= $(shell git remote get-url origin)
 BUILD_BRANCH ?= $(shell git rev-parse --abbrev-ref HEAD)
 BUILD_TAG ?= $(shell git tag --points-at HEAD)
@@ -38,7 +38,7 @@ BUILD_WINDOW_DISABLE_MINIMIZE ?=
 BUILD_WINDOW_DISABLE_CLOSE ?= 
 
 LDFLAGS='\
-	-X "mncplay/opts.Time=${BUILD_TIME}" \
+	-X "mncplay/opts.BuildTime=${BUILD_TIME}" \
 	-X "mncplay/opts.Origin=${BUILD_ORIGIN}" \
 	-X "mncplay/opts.Branch=${BUILD_BRANCH}" \
 	-X "mncplay/opts.Commit=${BUILD_COMMIT}" \

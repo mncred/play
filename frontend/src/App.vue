@@ -6,15 +6,12 @@
       </Suspense>
       <VMain>
         <RouterView v-slot="{ Component }">
-          <!-- FIXME: Transition doesn't work -->
           <Transition name="page">
-            <KeepAlive>
-              <Suspense>
-                <div>
-                  <component :is="Component" />
-                </div>
-              </Suspense>
-            </KeepAlive>
+            <Suspense>
+              <KeepAlive>
+                <component class="page" :is="Component" />
+              </KeepAlive>
+            </Suspense>
           </Transition>
         </RouterView>
       </VMain>
@@ -24,9 +21,11 @@
 
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
-import { RouterView } from 'vue-router'
-import { mdiCube } from '@mdi/js'
+import { RouterView, useRouter } from 'vue-router'
+import { Page } from './plugins/router'
 import WindowTitle from '@/components/organisms/WindowTitle/WindowTitle.vue'
+
+const router = useRouter()
 
 // Disable right clicking
 document.addEventListener('contextmenu', e => {
@@ -39,11 +38,23 @@ document.addEventListener('mousedown', e => {
     e.preventDefault()
   }
 })
+
+// Launcher Shortcuts
+document.addEventListener('keydown', e => {
+  console.log(e)
+  if (e.metaKey || e.ctrlKey) {
+    if (e.code === 'KeyR') {
+      location.reload()
+    }
+    if (e.code === 'KeyI') {
+      router.push({ name: Page.DevTools })
+    }
+  }
+})
 </script>
 
 <style lang="scss" scoped async>
 #window {
-  overflow: hidden;
   width: 100vw;
   height: 100vh;
   border-radius: 8px;
@@ -51,24 +62,22 @@ document.addEventListener('mousedown', e => {
   border: 1px solid rgba(255, 255, 255, .1);
 }
 
+.page {
+  position: absolute;
+}
+
 .page-enter-active,
 .page-leave-active {
-  transition: opacity 0.5s ease;
+  transition: .3s ease-in-out;
 }
 
 .page-enter-from,
 .page-leave-to {
-  opacity: 0;
+  filter: opacity(0);
 }
-</style>
 
-<style lang="scss">
-:root {
-  overflow: hidden;
-  margin: 0;
-  padding: 0;
-  user-select: none;
-  -webkit-user-select: none;
-  cursor: default;
+.page-enter-to,
+.page-leave-from {
+  filter: opacity(1);
 }
 </style>

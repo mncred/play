@@ -1,9 +1,11 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 import AuthPage from '@/views/AuthPage.vue'
+import DevToolsPage from '@/views/DevToolsPage.vue'
 import WelcomePage from '@/views/WelcomePage.vue'
 
 export enum Page {
+    DevTools = 'devtools',
     Welcome = 'welcome',
     Auth = 'auth',
 }
@@ -16,6 +18,11 @@ const pluginRouter = async () => {
                 path: '/',
                 name: Page.Welcome,
                 component: WelcomePage,
+            },
+            {
+                path: '/devtools',
+                name: Page.DevTools,
+                component: DevToolsPage,
             },
             {
                 path: '/auth',

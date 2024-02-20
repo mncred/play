@@ -23,23 +23,23 @@ const pluginLogger = async () => {
                 ...window.console,
                 log: (...data: any[]) => {
                     frontend.log(...data)
-                    backend.Info(render(...data))
+                    backend?.Info?.(render(...data))
                 },
                 debug: (...data: any[]) => {
                     frontend.debug(...data)
-                    backend.Debug(render(...data))
+                    backend?.Debug?.(render(...data))
                 },
                 info: (...data: any[]) => {
                     frontend.info(...data)
-                    backend.Info(render(...data))
+                    backend?.Info?.(render(...data))
                 },
                 warn: (...data: any[]) => {
                     frontend.warn(...data)
-                    backend.Warning(render(...data))
+                    backend?.Warning?.(render(...data))
                 },
                 error: (...data: any[]) => {
                     frontend.error(...data)
-                    backend.Error(render(...data))
+                    backend?.Error?.(render(...data))
                 },
             }
             console.info('pluginLogger installed, all frontend logs will be mirrored to backend')

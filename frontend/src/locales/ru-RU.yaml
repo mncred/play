@@ -1,6 +1,8 @@
 icon: Ru
 welcome: Добро пожаловать
 pages:
+    devtools:
+        title: Инструмент разработки
     welcome:
         title: Приветствие
     auth:

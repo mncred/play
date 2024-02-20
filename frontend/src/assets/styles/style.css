@@ -1,0 +1,14 @@
+:root {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: default;
+}
+
+.selectable {
+    user-select: text;
+    -webkit-user-select: text;
+    cursor: text;
+}

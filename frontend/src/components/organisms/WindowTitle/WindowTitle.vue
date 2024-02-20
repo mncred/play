@@ -7,9 +7,9 @@
                     {{ opts.windowTitle }}
                 </span>
             </div>
-            <Buttons class="fill-height ml-2" type="mac" :disableMinimize="disableMinimize"
-                :disableMaximize="disableMaximize" :disableClose="disableClose" @minimize="onMinimize"
-                @maximize="onMaximize" @close="onClose" />
+            <Buttons class="fill-height ml-2" style="position: relative; top: -2px;" type="mac"
+                :disableMinimize="disableMinimize" :disableMaximize="disableMaximize" :disableClose="disableClose"
+                @minimize="onMinimize" @maximize="onMaximize" @close="onClose" />
             <VSpacer />
             <Breadcrumbs style="font-weight: bold; font-size: .8rem; opacity: .7;" />
         </VAppBar>
@@ -41,7 +41,7 @@ const opts = await options.Get()
 
 const props = withDefaults(defineProps<{
     /** Allow window dragging by this element */
-    draggable: boolean,
+    draggable?: boolean,
     /** Show application icon */
     icon?: any
     /** Application icon color */

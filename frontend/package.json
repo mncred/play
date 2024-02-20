@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@fontsource/roboto": "^5.0.8",
+    "@iconify-prerendered/vue-line-md": "^0.23.1707117463",
     "@iconify-prerendered/vue-material-symbols-light": "^0.23.1706858583",
     "@mdi/js": "^7.4.47",
     "pinia": "^2.1.6",
