@@ -149,6 +149,31 @@ plugins:
 
 Плагины поставляют различные объекты которые имеют свой тип (kind) и свой формат конфига. Каждый компонент может запросить определённый kind и при передаче в конфиги будет произведён поиск среди  компонентов этого типа.
 Например, kind'ы видов: action, component, function
+
+---
+
+Лаунчер может поддерживать полностью расширяемую систему. Манифест плагина:
+
+```yaml
+package: ui.mncred
+provides: ui # Префикс используемый для всех прослушиваемых событий
+produces:
+  - system/ui/define
+  - system/ui/alert
+consumes:
+  - system/ui/ready
+script: |
+  plugin.on('system/ui/ready').then(event => {
+    plugin.emit('system/ui/define', {
+      kind: 'component',
+      element: 'button',
+      style: 'css:...',
+      on_click:
+        emit: 'system/ui/alert'
+        text: 'Button {{component.id}} clicked!'
+    })
+  })
+```
     
 </details>
 
